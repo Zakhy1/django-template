@@ -1,30 +1,25 @@
-# pull official base image
-FROM python:3.10
+FROM python:3.10.16-alpine3.21 as builder
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+RUN pip install poetry==2.1.1
 
-# install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
 
-# create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
-RUN mkdir -p $APP_HOME/static
-WORKDIR $APP_HOME
+WORKDIR /app
 
-# install python dependencies
-COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
-RUN pip install --no-cache /wheels/* && rm -rf /wheels
+COPY pyproject.toml poetry.lock ./
+RUN touch README.md
 
-# copy project
-COPY . $APP_HOME
+RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 
-# create the app user
-RUN addgroup --system app && adduser --system --group app && \
-    chown -R app:app $APP_HOME
+FROM python:3.10.16-alpine3.21 as runtime
 
-USER app
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
+
+WORKDIR /app
+
+COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY . .

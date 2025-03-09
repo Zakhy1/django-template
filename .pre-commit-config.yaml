@@ -1,0 +1,65 @@
+repos:
+  # Репозиторий pre-commit-hooks содержит базовые хуки для проверки кода.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0  # Версия репозитория.
+    hooks:
+      - id: trailing-whitespace  # Удаляет пробелы в конце строк.
+      - id: check-added-large-files  # Проверяет, что добавляемые файлы не слишком большие.
+      - id: check-yaml  # Проверяет корректность YAML-файлов.
+      - id: check-json  # Проверяет корректность JSON-файлов.
+        exclude: launch.json  # Исключает файл launch.json из проверки.
+      - id: check-case-conflict  # Проверяет конфликты имен файлов с учетом регистра.
+      - id: check-merge-conflict  # Проверяет наличие маркеров конфликтов слияния.
+      - id: end-of-file-fixer  # Добавляет пустую строку в конец файла, если её нет.
+
+  # Репозиторий isort используется для сортировки импортов в Python.
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+        exclude: __init__.py  # Исключает файлы __init__.py из обработки.
+        args: [ --profile, black, --filter-files ]  # Использует профиль Black для совместимости.
+
+  # pyupgrade автоматически обновляет синтаксис Python до более современного.
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.19.1
+    hooks:
+      - id: pyupgrade
+        args: [ --py310-plus ]  # Обновляет код для Python 3.10 и выше.
+
+  # Flake8 — это линтер Python, который проверяет код на соответствие стандартам PEP 8.
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.1.2
+    hooks:
+      - id: flake8
+        exclude: "app/project/settings/__init__.py"  # Исключает указанный файл из проверки.
+        args: [ "--ignore=E501,F821", "--max-line-length=120" ]  # Игнорирует определенные ошибки.
+
+  # mypy — это статический анализатор типов для Python.
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.15.0
+    hooks:
+      - id: mypy
+        args: [ --ignore-missing-imports, --disallow-untyped-defs ]  # Игнорирует отсутствующие импорты и требует аннотации типов.
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.9
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
+
+  # pygrep-hooks содержит регулярные выражения для поиска проблем в коде.
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-noqa  # Проверяет неправильное использование noqa.
+      - id: python-check-mock-methods  # Проверяет правильность использования методов mock.
+      - id: python-no-log-warn  # Запрещает использование устаревшего метода warn() в логгировании.
+      - id: python-use-type-annotations  # Требует использование аннотаций типов вместо комментариев.
+
+  # flynt преобразует старый синтаксис форматирования строк в f-строки.
+  - repo: https://github.com/ikamensh/flynt
+    rev: 1.0.1
+    hooks:
+      - id: flynt
