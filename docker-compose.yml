@@ -1,7 +1,7 @@
 version: '3.9'
 # --- Django: Базовый сервис ---
 x-app-base: &app-base
-  # image: registry.cybercode.pro/cybercode/project:latest
+  image: django-template:latest
   build: ./app
   hostname: web
   ports:
@@ -12,6 +12,11 @@ x-app-base: &app-base
     - ./app/static:/home/app/static/
     - ./app/media:/home/app/media/
     - ./app/log:/home/app/log/
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
   restart: always
 
 services:
@@ -20,18 +25,19 @@ services:
     <<: *app-base
     command: >
       sh -c "
-      python manage.py migrate --noinput &&
-      python manage.py runserver 0.0.0.0:8000
+      uv run python manage.py migrate --noinput &&
+      uv run python manage.py runserver 0.0.0.0:8000
       "
     profiles: [ "dev" ]
+    restart: no
 
   # --- Django: Для рабочей среды ---
   django-prod:
     <<: *app-base
     command: >
       sh -c "
-      python manage.py migrate --noinput &&
-      gunicorn -c mfssogr/gunicorn.conf.py
+      uv run python manage.py migrate --noinput &&
+      uv run gunicorn project.asgi:application -c project/gunicorn.conf.py
       "
     profiles: [ "prod" ]
 
@@ -41,7 +47,6 @@ services:
     hostname: celery
     volumes:
       - ./app/log:/home/app/log
-      - ./app/media:/home/app/media
 
   celery-beat:
     <<: *app-base
