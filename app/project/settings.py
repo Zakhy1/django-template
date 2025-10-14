@@ -104,17 +104,37 @@ LOGGING = {
         },
     },
     "root": {
-        "handlers": ["console"],
+        "handlers": [],
         "level": LOG_LEVEL,
     },
     "loggers": {
         "django": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
-        "django.request": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
-        "gunicorn.error": {"handlers": ["console"], "level": LOG_LEVEL},
-        "gunicorn.access": {"handlers": ["console"], "level": LOG_LEVEL},
-        "uvicorn": {"handlers": ["console"], "level": LOG_LEVEL},
-        "uvicorn.error": {"handlers": ["console"], "level": LOG_LEVEL},
-        "uvicorn.access": {"handlers": ["console"], "level": LOG_LEVEL},
+        "django.request": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "gunicorn.error": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "gunicorn.access": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "uvicorn": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+        "uvicorn.error": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "uvicorn.access": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
     },
 }
 
