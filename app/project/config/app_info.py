@@ -1,13 +1,3 @@
-# Список подключенных приложений
-INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-]
-
 # Информация о приложении
 SITE_TITLE = "Шаблон проекта"
 SITE_TITLE_S = "Шаблон проекта"

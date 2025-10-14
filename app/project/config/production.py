@@ -1,6 +1,11 @@
 import os
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "random-secret-key")
+secret_key = os.environ.get("SECRET_KEY", None)
+if secret_key is None:
+    raise ValueError("Не задан секретный ключ")
+
+SECRET_KEY = secret_key
+
 DEBUG = False
 DATABASES = {
     "default": {
