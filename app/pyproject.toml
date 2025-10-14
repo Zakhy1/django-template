@@ -1,27 +1,20 @@
-[tool.poetry]
+[project]
 name = "project-template"
 version = "0.1.0"
 description = ""
-authors = ["Zakhy1 <lirchzakhar@gmail.com>"]
-readme = "README.md"
-package-mode = false
+authors = [{ name = "Zakhy1", email = "lirchzakhar@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.2",
+    "gunicorn>=23.0.0",
+    "psycopg2-binary>=2.9.10",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-django = "^4.2"
-gunicorn = "^23.0.0"
-psycopg2-binary = "^2.9.10"
-colorama = "^0.4.6"
-
-[tool.poetry.group.dev.dependencies]
-setuptools = "^75.8.2"
-black = "^25.1.0"
-flake8 = "^7.1.2"
-mypy = "^1.15.0"
-pre-commit = "^4.1.0"
-isort = "^6.0.1"
-tomli = "^2.2.1"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "setuptools>=75.8.2",
+    "mypy>=1.15.0",
+    "pre-commit>=4.1.0",
+    "tomli>=2.2.1",
+    "ruff>=0.14.0",
+]
