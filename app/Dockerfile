@@ -1,25 +1,20 @@
-FROM python:3.10.16-alpine3.21 as builder
+FROM python:3.12
 
-RUN pip install poetry==2.1.1
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
 
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache
+# Установка uv
+ADD https://astral.sh/uv/install.sh /uv-installer.sh
 
-WORKDIR /app
+RUN sh /uv-installer.sh && rm /uv-installer.sh
 
-COPY pyproject.toml poetry.lock ./
-RUN touch README.md
+ENV PATH="/root/.local/bin/:$PATH"
 
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
+WORKDIR /home/app/
 
-FROM python:3.10.16-alpine3.21 as runtime
+# Установка зависимостей
+COPY uv.lock pyproject.toml ./
+RUN uv sync
 
-ENV VIRTUAL_ENV=/app/.venv \
-    PATH="/app/.venv/bin:$PATH"
-
-WORKDIR /app
-
-COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+# Копирование приложения
 COPY . .
+EXPOSE 8000

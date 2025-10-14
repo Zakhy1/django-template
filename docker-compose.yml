@@ -1,30 +1,57 @@
 version: '3.9'
+# --- Django: Базовый сервис ---
+x-app-base: &app-base
+  # image: registry.cybercode.pro/cybercode/project:latest
+  build: ./app
+  hostname: web
+  ports:
+    - "8000:8000"
+  env_file:
+    - .env
+  volumes:
+    - ./app/static:/home/app/static/
+    - ./app/media:/home/app/media/
+    - ./app/log:/home/app/log/
+  restart: always
 
 services:
-  web:
-    build: ./backend
-    #  place image
+  # --- Django: Для локального тестирования ---
+  django-dev:
+    <<: *app-base
     command: >
       sh -c "
-      python manage.py makemigrations --noinput &&
       python manage.py migrate --noinput &&
       python manage.py runserver 0.0.0.0:8000
       "
-    ports:
-      - '8000:8000'
-    expose:
-      - 8000
-    env_file:
-      - .env
-#    volumes:
-#      - ./backend/static:/home/app/web/static/
-    depends_on:
-      postgres:
-        condition: service_healthy
+    profiles: [ "dev" ]
 
+  # --- Django: Для рабочей среды ---
+  django-prod:
+    <<: *app-base
+    command: >
+      sh -c "
+      python manage.py migrate --noinput &&
+      gunicorn -c mfssogr/gunicorn.conf.py
+      "
+    profiles: [ "prod" ]
+
+  celery:
+    <<: *app-base
+    command: celery -A mfssogr worker --loglevel=INFO
+    hostname: celery
+    volumes:
+      - ./app/log:/home/app/log
+      - ./app/media:/home/app/media
+
+  celery-beat:
+    <<: *app-base
+    command: celery -A mfssogr beat -l info
+    hostname: celerybeat
+
+  # --- Redis: Кэш и очередь задач celery ---
   redis:
     container_name: redis
-    image: redis
+    image: redis:latest
     restart: always
     volumes:
       - redis_data:/data
@@ -36,8 +63,9 @@ services:
       timeout: 3s
       retries: 5
 
+  # --- Postgres: СУБД ---
   postgres:
-    image: postgres:15
+    image: postgres:17
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
