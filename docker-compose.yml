@@ -18,6 +18,11 @@ x-app-base: &app-base
     redis:
       condition: service_healthy
   restart: always
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "5"
 
 services:
   # --- Django: Для локального тестирования ---

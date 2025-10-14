@@ -1,4 +1,5 @@
 import os
+import sys
 import zoneinfo
 from pathlib import Path
 
@@ -76,9 +77,46 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 PROJECT_ENV = os.environ.get("PROJECT_ENV", "local")
 
+
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name}: {message}",
+            "style": "{",
+        },
+        "json": {
+            "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "fmt": "%(asctime)s %(levelname)s %(name)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            # Можно выбрать формат — человекочитаемый или json
+            "formatter": "json" if os.getenv("LOG_JSON", "0") == "1" else "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": LOG_LEVEL,
+    },
+    "loggers": {
+        "django": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+        "django.request": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+        "gunicorn.error": {"handlers": ["console"], "level": LOG_LEVEL},
+        "gunicorn.access": {"handlers": ["console"], "level": LOG_LEVEL},
+        "uvicorn": {"handlers": ["console"], "level": LOG_LEVEL},
+        "uvicorn.error": {"handlers": ["console"], "level": LOG_LEVEL},
+        "uvicorn.access": {"handlers": ["console"], "level": LOG_LEVEL},
+    },
+}
 
 if PROJECT_ENV == "local":  # type: ignore
     from project.config.local import *  # noqa: F403
