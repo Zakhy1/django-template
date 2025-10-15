@@ -18,7 +18,7 @@
 
 ## Описание
 
-long description 
+long description
 
 ---
 
@@ -30,16 +30,15 @@ long description
 
 Ниже приведена таблица, отображающая технологический стек на проект.
 
-| Компонент             | Используемая технология                |
-|-----------------------|----------------------------------------|
-| Язык программирования | **Python 3.12**                        |
-| Backend               | **Django 5.2**, Django REST Framework  |
-| Frontend              | React и/или Django templates           |
-| База данных           | **PostgreSQL** TimescaleDB, PipelineDB |
-| Очереди / задачи      | Celery + Redis                         |
-| Веб-сокеты            | Django Channels                        |
-| Контейнеризация       | Docker / Docker Compose                |
-| Мониторинг            | Prometheus + Grafana (опционально)     |
+| Компонент             | Используемая технология               |
+|-----------------------|---------------------------------------|
+| Язык программирования | **Python 3.12**                       |
+| Backend               | **Django 5.2**, Django REST Framework |
+| Frontend              | SPA и/или Django templates            |
+| База данных           | **PostgreSQL**                        |
+| Очереди / задачи      | Celery + Redis                        |
+| Контейнеризация       | Docker / Docker Compose               |
+| Мониторинг            | Prometheus + Grafana (опционально)    |
 
 ## Архитектура
 
