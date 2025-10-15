@@ -1,6 +1,6 @@
-# Project name
+# Project
 
-**Project name** — short description
+**Project** — Краткое описание проекта
 
 ---
 
@@ -18,13 +18,14 @@
 
 ## Описание
 
-long description
+В чем суть проекта, какие проблемы решает, назначение
 
 ---
 
 ## Функциональность
 
-1. [ ] list functions
+1. [ ] Хранить что нибудь
+2. [ ] Генерировать мильон рублей в наносек 
 
 ## Технологический стек
 
@@ -41,10 +42,39 @@ long description
 | Мониторинг            | Prometheus + Grafana (опционально)    |
 
 ## Архитектура
+Здесь надо описать архитектуру приложения
 
 ## Установка и запуск
 
 ## Переменные окружения
+[Файл](example.env), на основе которого можно создать .env
+[Файл](local.env), с которым можно вести локальную разработку
+
+Список и назначение переменных окружения:
+```dotenv
+# Postgres variables
+POSTGRES_PASSWORD=password
+POSTGRES_USER=user
+POSTGRES_DB=db
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+
+# Redis variables
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+# Django variables
+PROJECT_ENV=production # Имя окружения (local, production)
+SECRET_KEY=sample-key  # Секретный ключ для шифрования сессий
+DEBUG=0                # Состояние отладки
+
+LOG_LEVEL=INFO         # Минимальный уровень логирования
+LOG_TARGET=file        # Куда писать логи (console, file)
+LOG_JSON=1             # JSON формат логов (1,0)
+LOG_DIR=log            # Каталог, куда писать логи (от app/)
+
+TZ=Asia/Krasnoyarsk    # Временная зона приложения
+```
 
 ## Структура проекта
 
