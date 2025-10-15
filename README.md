@@ -35,7 +35,7 @@ long description
 | Язык программирования | **Python 3.12**                       |
 | Backend               | **Django 5.2**, Django REST Framework |
 | Frontend              | SPA и/или Django templates            |
-| База данных           | **PostgreSQL**                        |
+| База данных           | **PostgreSQL**                     |
 | Очереди / задачи      | Celery + Redis                        |
 | Контейнеризация       | Docker / Docker Compose               |
 | Мониторинг            | Prometheus + Grafana (опционально)    |
@@ -47,3 +47,38 @@ long description
 ## Переменные окружения
 
 ## Структура проекта
+
+```
+├── 📂 app
+│   ├── 📁 log
+│   ├── 📁 media
+│   ├── 📁 static
+│   ├── 📂 project
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 asgi.py
+│   │   ├── 📄 celery.py
+│   │   ├── 📂 config
+│   │   │   ├── 📄 __init__.py
+│   │   │   ├── 📄 app_info.py
+│   │   │   ├── 📄 celery_settings.py
+│   │   │   ├── 📄 local.py
+│   │   │   ├── 📄 logging.py
+│   │   │   └── 📄production.py
+│   │   ├── 📄 gunicorn.conf.py
+│   │   ├── 📄 settings.py
+│   │   ├── 📄 urls.py
+│   │   └── 📄 wsgi.py
+│   ├── 📄 Dockerfile
+│   ├── 📄 manage.py
+│   ├── 📄 pyproject.toml
+│   └── 📄 uv.lock
+├── 📂 nginx
+│   ├── 📂 configs
+│   │   └── 📄 site.conf
+│   └── 📄 nginx.conf
+├── 📄 local.env
+├── 📄 example.env
+├── 📄 docker-compose.yml
+├── 📄 ruff.toml
+└── 📄 README.md
+```
