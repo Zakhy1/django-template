@@ -35,7 +35,7 @@ long description
 | Язык программирования | **Python 3.12**                       |
 | Backend               | **Django 5.2**, Django REST Framework |
 | Frontend              | SPA и/или Django templates            |
-| База данных           | **PostgreSQL**                     |
+| База данных           | **PostgreSQL**                        |
 | Очереди / задачи      | Celery + Redis                        |
 | Контейнеризация       | Docker / Docker Compose               |
 | Мониторинг            | Prometheus + Grafana (опционально)    |
