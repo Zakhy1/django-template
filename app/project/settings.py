@@ -1,11 +1,19 @@
 import os
+import zoneinfo
 from pathlib import Path
 
 from split_settings.tools import include
 
+
+include("config/app_info.py")
+include("config/celery_settings.py")
+include("config/logging.py")
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = ["*"]
+
+DEBUG = bool(int(os.getenv("DEBUG", "0")))
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -49,19 +57,18 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
     },
 ]
-
 
 STATIC_URL = "static/"
 
@@ -69,7 +76,6 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 PROJECT_ENV = os.environ.get("PROJECT_ENV", "local")
 if PROJECT_ENV == "local":  # type: ignore
@@ -81,6 +87,3 @@ elif PROJECT_ENV == "production":  # type: ignore
     include("config/production.py")
 
     STATIC_ROOT = BASE_DIR / "static"
-
-include("config/celery_settings.py")
-include("config/logging.py")

@@ -7,13 +7,13 @@ LOG_TARGET = os.getenv("LOG_TARGET", "console")  # "console" или "file"
 LOG_JSON = os.getenv("LOG_JSON", "0") == "1"  # 1 → JSON формат
 LOG_DIR = os.getenv("LOG_DIR", "/var/log/app")  # если выбран file
 
-print(LOG_TARGET)
 if LOG_TARGET == "file":
     os.makedirs(LOG_DIR, exist_ok=True)
 
 FORMATTERS = {
     "verbose": {
         "format": "[{asctime}] {levelname} {name}: {message}",
+        "datefmt": "%Y-%m-%d %H:%M:%S",
         "style": "{",
     },
     "json": {

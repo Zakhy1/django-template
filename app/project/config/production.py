@@ -6,7 +6,6 @@ if secret_key is None:
 
 SECRET_KEY = secret_key
 
-DEBUG = False
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",

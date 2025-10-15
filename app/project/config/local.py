@@ -1,5 +1,3 @@
-DEBUG = True
-
 SECRET_KEY = "django-debug-key"
 DATABASES = {
     "default": {
