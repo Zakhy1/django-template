@@ -3,7 +3,7 @@ import sys
 import zoneinfo
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = ["*"]
 # Список подключенных приложений
@@ -77,8 +77,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-PROJECT_ENV = os.environ.get("PROJECT_ENV", "local")
-
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 LOG_TARGET = os.getenv("LOG_TARGET", "console")  # "console" или "file"
@@ -115,7 +113,6 @@ HANDLERS = {
     },
 }
 
-# выбираем активный хэндлер
 active_handler = "file" if LOG_TARGET == "file" else "console"
 
 LOGGING = {
@@ -142,13 +139,13 @@ LOGGING = {
                            "propagate": False},
     },
 }
-
+PROJECT_ENV = os.environ.get("PROJECT_ENV", "local")
 if PROJECT_ENV == "local":  # type: ignore
     from project.config.local import *  # noqa: F403
 
-    STATICFILES_DIRS = [os.path.join(os.path.dirname(BASE_DIR), "static")]
+    STATICFILES_DIRS = [BASE_DIR / "static" ]
 
 elif PROJECT_ENV == "production":  # type: ignore
     from project.config.production import *  # noqa: F403
 
-    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+    STATIC_ROOT = BASE_DIR / "static"
