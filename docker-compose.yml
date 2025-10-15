@@ -48,14 +48,14 @@ services:
 
   celery:
     <<: *app-base
-    command: celery -A mfssogr worker --loglevel=INFO
+    command: celery -A project worker --loglevel=INFO
     hostname: celery
     volumes:
       - ./app/log:/home/app/log
 
   celery-beat:
     <<: *app-base
-    command: celery -A mfssogr beat -l info
+    command: celery -A project beat -l info
     hostname: celerybeat
 
   # --- Redis: Кэш и очередь задач celery ---

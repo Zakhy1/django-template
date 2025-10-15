@@ -6,7 +6,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = ["*"]
-# Список подключенных приложений
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -14,6 +14,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_celery_beat",
+
 ]
 
 MIDDLEWARE = [
@@ -76,6 +78,27 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Redis: Адрес для подключения
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}"
+
+# Celery: Настройки брокера
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+
+# Celery: Формат данных
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
+# Celery: Прочие настройки
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_DEFAULT_QUEUE = "default"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = False
+
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
@@ -143,7 +166,7 @@ PROJECT_ENV = os.environ.get("PROJECT_ENV", "local")
 if PROJECT_ENV == "local":  # type: ignore
     from project.config.local import *  # noqa: F403
 
-    STATICFILES_DIRS = [BASE_DIR / "static" ]
+    STATICFILES_DIRS = [BASE_DIR / "static"]
 
 elif PROJECT_ENV == "production":  # type: ignore
     from project.config.production import *  # noqa: F403
